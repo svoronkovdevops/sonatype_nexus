@@ -1,0 +1,17 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "basic" do |basic|
+    basic.vm.box_download_insecure = true
+    basic.vm.box = "hashicorp/bionic64"
+    basic.vm.network "private_network", ip: "100.0.0.15"
+    basic.vm.synced_folder "./vagrant", "/home/vagrant", disabled: false
+	basic.vm.network "forwarded_port", guest: 8081, host: 8011
+	basic.vm.network "forwarded_port", guest: 22, host: 2445
+	basic.vm.provision "shell", path: "test.sh"
+    basic.vm.hostname = "basic"
+    basic.vm.provider "virtualbox" do |v|
+      v.name = "basic"
+      v.memory = 3072
+      v.cpus = 2
+    end
+  end
+end
